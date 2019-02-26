@@ -11,10 +11,11 @@ namespace UserManagement.Service
 {
     public class CustomerService
     {
+        //create a db object
         CustomerContext db = new CustomerContext();
 
         public List<ViewCustomer> GetCustomer(){
-            //create a db object
+           
             
 
             List<Customer> customers = db.Customers.ToList();

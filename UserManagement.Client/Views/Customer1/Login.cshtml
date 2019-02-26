@@ -1,48 +1,43 @@
-﻿@using UserManagement.Models
-@model Customer
+﻿@*@{
+        Layout = null;
+    }*@
 
-@{
-    ViewBag.Title = "Login";
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <script type="text/javascript">
+        function login() {
+            debugger
+            var username = $('#username').val();
+            var password = $('#password').val();
 
-<h2>Login</h2>
-
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-
-<div class="form-horizontal">
-    <hr />
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    <div class="form-group">
-        @Html.LabelFor(model => model.Username, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
-        </div>
-    </div>
+            $.ajax({
+                url: "http://localhost:51470/Customer1/CheckLogin",
+                type: "GET",
+                content: "application/json; charset=utf-8",
+                dataType: "json",
+                //data: { model:JSON.stringify(data)},
+                data: { username: username, password: password },
+                success: function (d) {
+                    alert(d);
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    // TODO: Show error
+                }
+            });
+        }
 
 
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Login" class="btn btn-default" />
-        </div>
-    </div>
-</div>
-}
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
-
+    </script>
+</head>
+<body>
+    <form class="form">
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <input type="button" id="loginBtn" value="login" onclick="login()" />
+        @Html.ActionLink("Doesn't have an account", "ViewRegister")
+    </form>
+</body>
+</html>

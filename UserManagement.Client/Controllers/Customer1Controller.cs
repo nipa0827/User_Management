@@ -5,42 +5,14 @@ using System.Web;
 using System.Web.Mvc;
 using UserManagement.Models;
 using UserManagement.Service;
+using UserManagement.ViewModels;
 
 namespace UserManagement.Client.Controllers
 {
     public class Customer1Controller : Controller
     {
         CustomerService service = new CustomerService();
-        // GET: Customer1
-        public ActionResult Index()
-        {
-            var viewCustomer = service.GetCustomer();
-
-            return View(viewCustomer);
-        }
-
-        public ActionResult Details(int id)
-        {           
-            var customer = service.GetCustomer(id);
-
-            return View(customer);
-        }
-
-        [HttpGet]
-        public ActionResult Create()
-        {
-
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult Create(Customer customer)
-        {
-            //save customer data
-            bool saved = service.Save(customer);
-            return RedirectToAction("Index");
-        }
-
+       
         [HttpGet]
         public ActionResult Login()
         {
@@ -48,44 +20,37 @@ namespace UserManagement.Client.Controllers
             return View("Login");
         }
 
-        [HttpPost]
-        public ActionResult Login(string username, string password)
+        [HttpGet]
+        public bool CheckLogin(string username, string password)
         {
             bool check = service.CheckValidity(username,password);
 
-            if (check) return View("LoggedIn");
+            return check;
+        }
 
-            else return View("Login");
+
+        [HttpGet]
+        public ActionResult ViewRegister()
+        {
+            return View("Register");
         }
 
         [HttpGet]
-        public ActionResult Edit(int id)
+        public bool Register(string firstName, string lastName, string email, string role, string username, string password)
         {
-            Customer customer = service.GetDbCustomer(id);
-            return View(customer);
-        }
+            Role myRole;
+            Enum.TryParse(role, out myRole);
+            Customer customer = new Customer();
 
-        [HttpPost]
-        public ActionResult Edit(Customer customer)
-        {
-            //save customer data
-            bool saved = service.Update(customer);
-            return RedirectToAction("Index");
-        }
+            customer.FirstName = firstName;
+            customer.LastName = lastName;
+            customer.Email = email;
+            customer.CustomerRole = myRole;
+            customer.Username = username;
+            customer.Password = password;
 
-        [HttpGet]
-        public ActionResult Delete(int id)
-        {
-            Customer customer = service.GetDbCustomer(id);
-            return View(customer);
-        }
-
-        [HttpPost]
-        public ActionResult Delete(Customer customer)
-        {
-            //save customer data
-            bool saved = service.Delete(customer);
-            return RedirectToAction("Index");
+            service.Save(customer);
+            return true;
         }
     }
 }

@@ -13,6 +13,13 @@ namespace UserManagement.Client
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            //routes.MapPageRoute(
+            //routeName: "Default/",
+            //routeUrl: "Default/{Home}/{chart}",
+            //physicalFile: "~/Views/{Home}/{chart}.aspx"
+            //);
+
+
             routes.MapRoute(
              "Default",
              "{controller}/{action}/{id}",
